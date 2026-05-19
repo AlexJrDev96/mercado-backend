@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# Banco de Dados Local Docker
+db/
+*.sock
+
+# SQLite database
+*.db
+
+# Arquivos de upload do sistema
+uploads/
+
+# IDE e OS
+.vscode/
+.idea/
+.DS_Store

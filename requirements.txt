@@ -1,0 +1,8 @@
+Flask==2.1.0
+flask_sqlalchemy
+mysql-connector-python
+werkzeug==2.0.2
+sqlalchemy==1.4.49
+twilio==7.0.0
+python-dotenv==0.19.2
+Flask-CORS==4.0.0
