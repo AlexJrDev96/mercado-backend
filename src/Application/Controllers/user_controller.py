@@ -76,6 +76,28 @@ class UserController:
         }), 200)
     
     @staticmethod
+    def get_user():
+        token = request.headers.get('Authorization')
+        if not token:
+            return make_response(jsonify({"erro": "Token não fornecido"}), 401)
+
+        token_validation = UserService.validate_token(token)
+        if not token_validation["success"]:
+            return make_response(jsonify({"erro": token_validation["message"]}), 401)
+
+        user_id = token_validation["user_id"]
+        user = UserService.get_user_by_id(user_id)
+        if not user:
+            return make_response(jsonify({"erro": "Usuário não encontrado"}), 404)
+
+        return make_response(jsonify({
+            "mensagem": "Usuário encontrado com sucesso",
+            "nome": user.name,
+            "email": user.email,
+            "celular": user.celular
+        }), 200)
+
+    @staticmethod
     def update_user():
         token = request.headers.get('Authorization')
         data = request.get_json()

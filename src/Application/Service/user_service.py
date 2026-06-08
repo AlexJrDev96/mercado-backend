@@ -16,6 +16,13 @@ class UserService:
         return [UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status, user.code) for user in users]
     
     @staticmethod
+    def get_user_by_id(user_id):
+        user = db.session.query(User).filter(User.id == user_id).first()
+        if user:
+            return UserDomain(user.id, user.name, user.cnpj, user.email, user.celular, user.status, user.code)
+        return None
+    
+    @staticmethod
     def create_user(name, cnpj, email, celular, password, code):
         usuario_existente = db.session.query(User).filter(User.cnpj == cnpj).first()
         if usuario_existente:
