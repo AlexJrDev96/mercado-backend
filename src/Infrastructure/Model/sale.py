@@ -11,6 +11,7 @@ class Sale(db.Model):
     price = db.Column(db.Numeric(10, 2), nullable=False)
     total_price = db.Column(db.Numeric(10, 2), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    status = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     def to_dict(self):
@@ -22,5 +23,6 @@ class Sale(db.Model):
             "price": float(self.price) if self.price is not None else 0.0,
             "total_price": float(self.total_price) if self.total_price is not None else 0.0,
             "user_id": self.user_id,
+            "status": self.status,
             "created_at": self.created_at.isoformat() if self.created_at else None
         }

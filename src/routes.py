@@ -65,3 +65,7 @@ def init_routes(app):
     @app.route('/venda', methods=['GET'])
     def get_all_vendas():
         return SaleController.get_all_vendas()
+
+    @app.route('/venda/status', methods=['PUT'])
+    def update_status_sale():
+        return SaleController.update_status_sale()

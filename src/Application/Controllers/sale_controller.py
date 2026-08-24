@@ -60,4 +60,32 @@ class SaleController:
                 "venda": sale_domain.to_dict()
             }), 201
         )
-    
+
+    @staticmethod
+    def update_status_sale():
+        token = request.headers.get('Authorization')
+        if not token:
+            return make_response(jsonify({"erro": "Token não fornecido"}), 401)
+
+        token_validation = UserService.validate_token(token)
+        if not token_validation["success"]:
+            return make_response(jsonify({"erro": token_validation["message"]}), 401)
+
+        user_id = token_validation["user_id"]
+        data = request.get_json()
+
+        if not data:
+            return make_response(jsonify({"erro": "Dados para atualização não fornecidos"}), 400)
+
+        sale_id = data.get('id')
+        if not sale_id:
+            return make_response(jsonify({"erro": "ID da venda não fornecido"}), 400)
+
+        if 'status' not in data:
+            return make_response(jsonify({"erro": "Status não fornecido"}), 400)
+
+        result = SaleService.update_status(sale_id, user_id, data.get('status'))
+
+        if result["success"]:
+            return make_response(jsonify({"mensagem": result["message"]}), 200)
+        return make_response(jsonify({"erro": result["message"]}), 400)

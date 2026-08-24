@@ -55,19 +55,20 @@ class SaleService:
                 sale.price,
                 sale.total_price,
                 sale.user_id,
+                sale.status,
                 sale.created_at
             )
-            
+
             return {
                 "success": True,
                 "message": f"Venda {codigo_pedido} realizada com sucesso! Produto: {product.name}, Quantidade: {quantity}",
                 "venda": sale_domain
             }
-        
+
         except Exception as e:
             db.session.rollback()
             return {"success": False, "message": f"Erro ao registrar venda: {str(e)}"}
-    
+
     @staticmethod
     def get_all_vendas(user_id):
         try:
@@ -81,7 +82,23 @@ class SaleService:
                 sale.price,
                 sale.total_price,
                 sale.user_id,
+                sale.status,
                 sale.created_at
             ) for sale in sales]
         except Exception as e:
             return {"success": False, "message": f"Erro ao buscar vendas: {str(e)}"}
+
+    @staticmethod
+    def update_status(sale_id, user_id, status):
+        sale = db.session.query(Sale).filter(Sale.id == sale_id, Sale.user_id == user_id).first()
+        if not sale:
+            return {"success": False, "message": "Venda não encontrada!"}
+
+        sale.status = status
+
+        try:
+            db.session.commit()
+            return {"success": True, "message": "Status da venda atualizado com sucesso."}
+        except Exception as e:
+            db.session.rollback()
+            return {"success": False, "message": f"Erro ao atualizar o banco de dados: {str(e)}"}
