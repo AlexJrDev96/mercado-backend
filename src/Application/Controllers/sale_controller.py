@@ -40,24 +40,21 @@ class SaleController:
         
         user_id = token_validation["user_id"]
         data = request.get_json()
-        
-        product_id = data.get('product_id')
-        quantity = data.get('quantity')
 
-        if not product_id or not quantity:
-            return make_response(jsonify({"erro": "Dados incompletos (ID produto/Quantidade)"}), 400)
+        itens = data.get('itens')
 
-        result = SaleService.create_venda(user_id, product_id, quantity)
+        if not itens or not isinstance(itens, list) or len(itens) == 0:
+            return make_response(jsonify({"erro": "Nenhum item fornecido para a venda (formato esperado: array 'itens')"}), 400)
+
+        result = SaleService.create_venda(user_id, itens)
 
         if not result["success"]:
             return make_response(jsonify({"erro": result["message"]}), 400)
 
-        sale_domain = result["venda"]
-
         return make_response(
             jsonify({
                 "message": "Venda realizada com sucesso!",
-                "venda": sale_domain.to_dict()
+                "vendas": [venda.to_dict() for venda in result["vendas"]]
             }), 201
         )
 
